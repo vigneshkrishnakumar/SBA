@@ -14,14 +14,26 @@ import { TaskViewComponent } from './task/task-view/task-view.component';
 import { UserAddComponent } from './user/user-add/user-add.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserViewComponent } from './user/user-view/user-view.component';
+import { TaskService } from './services/task.service';
+import { ParentTaskService } from './services/parenttask.service';
+import { ProjectService } from './services/project.service';
+import { UserService } from './services/user.service';
+import { TaskPipe } from './pipes/task.pipe';
+import { ProjectPipe } from './pipes/project.pipe';
+import { UserPipe } from './pipes/user.pipe';
+import { UserSortPipe } from './pipes/usersort.pipe';
+import { ProjectSortPipe } from './pipes/projectsort.pipe';
+import { TaskSortPipe } from './pipes/tasksort.pipe';
 
 const routes : Routes = [
   { path: '', redirectTo: '/viewTask', pathMatch: 'full' },
   { path: 'viewTask', component: TaskViewComponent},
   { path: 'addTask', component: TaskAddComponent},
-  { path: 'editTask/:id', component: TaskEditComponent},
+  { path: 'addTask/:id', component: TaskAddComponent},
   { path: 'addProject', component: ProjectAddComponent},
+  { path: 'addProject/:id', component: ProjectAddComponent},
   { path: 'addUser', component: UserAddComponent},
+  { path: 'addUser/:id', component: UserAddComponent}
 ];
 
 @NgModule({
@@ -35,7 +47,13 @@ const routes : Routes = [
     TaskViewComponent,
     UserAddComponent,
     UserEditComponent,
-    UserViewComponent
+    UserViewComponent,
+    ProjectPipe,
+    UserPipe,
+    TaskPipe,
+    UserSortPipe,
+    ProjectSortPipe,
+    TaskSortPipe
   ],
   imports: [
     BrowserModule,
@@ -45,7 +63,17 @@ const routes : Routes = [
     CommonModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    ProjectPipe,
+    UserPipe,
+    TaskPipe,
+    UserSortPipe,
+    ProjectSortPipe,
+    TaskSortPipe,
+    TaskService, 
+    ParentTaskService, 
+    ProjectService, 
+    UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

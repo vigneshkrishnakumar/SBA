@@ -1,12 +1,13 @@
 <div class="container">
     <span class="h4 text-success">{{status}}</span>
+    <span class="h4 text-danger">{{error}}</span>
   </div>
   <form [formGroup]="myForm" (submit)="onSubmit()">
   <div formGroupName="taskGroup">
       <div class="form-group row">
           <label for="project" class="col-sm-2 col-form-label"><b>Project:</b></label>
           <div class="col-sm-3">
-          <input type="text" class="form-control" readonly [(ngModel)]="project.title" id="project" name="project" formControlName="project">
+          <input type="text" class="form-control" readonly [(ngModel)]="project.project" id="project" name="project" formControlName="project">
           <small class="text-danger" *ngIf="!myForm.controls['taskGroup']['controls'].project.valid && myForm.controls['taskGroup']['controls'].project.touched">Project required!!</small>
         </div>
         <div class="col-50"><button type="button" class="btn btn-primary  mr-3" data-toggle="modal" data-target="#projectModal" (click)="getProjects()">Search</button></div>
@@ -36,7 +37,7 @@
       <div class="form-group row">
         <label for="parentTask" class="col-sm-2 col-form-label"><b>Parent Task:</b></label>
         <div class="col-sm-3">
-        <input type="text" class="form-control" readonly [(ngModel)]="parent.parentTask" id="parentTask" name="parentTask" formControlName = "parentTask">
+        <input type="text" class="form-control" [readonly]="isReadOnly" [(ngModel)]="parent.parentTask" id="parentTask" name="parentTask" formControlName = "parentTask">
         <small class="text-danger" *ngIf="!myForm.controls['taskGroup']['controls'].parentTask.valid && myForm.controls['taskGroup']['controls'].parentTask.touched">Parent Task required!!</small>
       </div>
       <div class="col-50"><button type="button" class="btn btn-primary  mr-3" data-toggle="modal" data-target="#parentModal" (click)="getParentTasks()">Search</button></div>
@@ -63,7 +64,7 @@
       </div>
       <div class="form-group row">
           <div class="col-7">
-          <button type="submit" class="btn btn-primary  mr-3" [disabled]="!myForm.valid">Add Task</button>
+          <button type="submit" class="btn btn-primary  mr-3">{{btnType}}</button>
           <button type="button" class="btn btn-primary" (click)="resetForm()">Reset</button>
           </div>
       </div>
@@ -81,8 +82,8 @@
         </div>
         <div class="modal-body">
             <div class="list-group" *ngFor="let project of projects">
-                <li class="list-group-item list-group-item-action" (click)="selectedProject()">
-                  {{project.title}}
+                <li class="list-group-item list-group-item-action" (click)="selectedProject(project.projectId)">
+                  {{project.project}}
                 </li>
             </div>
         </div>
@@ -105,7 +106,7 @@
         </div>
         <div class="modal-body">
             <div class="list-group" *ngFor="let parent of parents">
-                <li class="list-group-item list-group-item-action" (click)="selectedParentTask()">
+                <li class="list-group-item list-group-item-action" (click)="selectedParentTask(parent.parentId)">
                   {{parent.parentTask}}
                 </li>
             </div>
@@ -129,7 +130,7 @@
         </div>
         <div class="modal-body">
             <div class="list-group" *ngFor="let user of users">
-                <li class="list-group-item list-group-item-action" (click)="selectedUser()">
+                <li class="list-group-item list-group-item-action" (click)="selectedUser(user.userId)">
                   {{user.firstName}}
                 </li>
             </div>

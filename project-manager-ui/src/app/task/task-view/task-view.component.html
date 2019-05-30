@@ -30,15 +30,15 @@
 <div class="form-group row">
     <label for="search" class="col-sm-1 col-form-label"><b>Project:</b></label>
     <div class="col-sm-3">
-      <input type="text" readonly [(ngModel)]="project.title" class="form-control" id="search" name="search">
+      <input type="text" readonly [(ngModel)]="project.project" class="form-control" id="search" name="search">
     </div>
     <button type="button" class="btn btn-primary  mr-3" data-toggle="modal" data-target="#projectModal" (click)="getProjects()">Search</button>
     <label class="col-form-label"><b>Sort By:</b></label>
     <div class="col-sm-5">
-        <button type="button" class="btn btn-primary  mr-3">Start Date</button>
-        <button type="button" class="btn btn-primary  mr-3">End Date</button>
-        <button type="button" class="btn btn-primary  mr-3">Priority</button>
-        <button type="button" class="btn btn-primary  mr-3">Completed</button>
+        <button type="button" (click) = "sortBy('taskStartDate')" class="btn btn-primary  mr-3">Start Date</button>
+        <button type="button" (click) = "sortBy('taskEndDate')" class="btn btn-primary  mr-3">End Date</button>
+        <button type="button" (click) = "sortBy('taskPriority')" class="btn btn-primary  mr-3">Priority</button>
+        <button type="button" (click) = "sortBy('taskCompleted')" class="btn btn-primary  mr-3">Completed</button>
     </div>
 </div>
 <hr/>
@@ -47,7 +47,7 @@
 </div>
 <div class="row table-responsive">
     <table class="table">
-        <tbody *ngFor="let task of project.tasks">
+        <tbody *ngFor="let task of project.tasks | taskfilter : taskName.value : parentTask.value : priorityFrom.value : priorityTo.value : startDate.value : endDate.value | tasksortfilter : property">
             <tr>
                 <th scope="col">Task</th>
                 <th scope="col">Parent</th>
@@ -59,23 +59,23 @@
                 <td>
                     <div class="card text-white bg-secondary mb-3">
                       <div class="card-body">
-                          <h5 class="card-title">{{task.newTask.taskName}}</h5>
+                          <h5 class="card-title">{{task.taskName}}</h5>
                       </div>
                     </div>
                 </td>
                 <td>
                     <div class="card text-white bg-secondary mb-3">
                       <div class="card-body">
-                          <h5 class="card-title">{{task.parentTask}}</h5>
+                          <h5 class="card-title">{{task.parentTask.parentTask}}</h5>
                       </div>
                     </div>
                 </td>
-                <td>{{task.newTask.priority}}</td>
-                <td>{{task.newTask.startDate}}</td>
-                <td>{{task.newTask.endDate}}</td>
-                <td><button type="button" [disabled]="isEnded(task.newTask.endDate)" class="btn btn-primary" routerLink="/editTask/{{task.newTask.taskId}}">Edit
+                <td>{{task.priority}}</td>
+                <td>{{task.startDate}}</td>
+                <td>{{task.endDate}}</td>
+                <td><button type="button" [disabled]="isEnded(task.endDate)" class="btn btn-primary" routerLink="/addTask/{{task.taskId}}">Edit
                   </button></td>
-                <td><button type="button" [disabled]="isEnded(task.newTask.endDate)" class="btn btn-danger" (click)="endTask(task.newTask.taskId)">End Task
+                <td><button type="button" [disabled]="isEnded(task.endDate)" class="btn btn-danger" (click)="endTask(task.taskId)">End Task
                   </button></td>
             </tr>
         </tbody>
@@ -93,8 +93,8 @@
         </div>
         <div class="modal-body">
             <div class="list-group" *ngFor="let project of projects">
-                <li class="list-group-item list-group-item-action" (click)="selectedProject()">
-                  {{project.title}}
+                <li class="list-group-item list-group-item-action" (click)="selectedProject(project.projectId)">
+                  {{project.project}}
                 </li>
             </div>
         </div>

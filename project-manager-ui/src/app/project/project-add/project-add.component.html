@@ -1,5 +1,6 @@
 <div class="container">
     <span class="h4 text-success">{{status}}</span>
+    <span class="h4 text-danger">{{error}}</span>
   </div>
   <form [formGroup]="myForm" (submit)="onSubmit()">
   <div formGroupName="projectGroup">
@@ -43,7 +44,7 @@
       </div>
       <div class="form-group row">
           <div class="col-7">
-          <button type="submit" class="btn btn-primary  mr-3" [disabled]="!myForm.valid">Add</button>
+          <button type="submit" class="btn btn-primary  mr-3">{{btnType}}</button>
           <button type="button" class="btn btn-primary" (click)="resetForm()">Reset</button>
           </div>
       </div>
@@ -53,27 +54,27 @@
   <div class="form-group row">
       <label for="search" class="col-sm-1 col-form-label"><b>Search:</b></label>
       <div class="col-sm-3">
-        <input type="text" #taskName (keyup)="0" class="form-control" id="search" name="search">
+        <input type="text" #project (keyup)="0" class="form-control" id="search" name="search">
       </div>
       <label class="col-form-label"><b>Sort By:</b></label>
       <div class="col-sm-5">
-          <button type="button" class="btn btn-primary  mr-3">Start Date</button>
-          <button type="button" class="btn btn-primary  mr-3">End Date</button>
-          <button type="button" class="btn btn-primary  mr-3">Priority</button>
-          <button type="button" class="btn btn-primary  mr-3">Completed</button>
+          <button type="button" (click) = "sortBy('projectStartDate')" class="btn btn-primary  mr-3">Start Date</button>
+          <button type="button" (click) = "sortBy('projectEndDate')" class="btn btn-primary  mr-3">End Date</button>
+          <button type="button" (click) = "sortBy('projectPriority')" class="btn btn-primary  mr-3">Priority</button>
+          <button type="button" (click) = "sortBy('projectCompleted')" class="btn btn-primary  mr-3">Completed</button>
       </div>
   </div>
   <hr/>
-      <div class="row" *ngFor="let project of projects">
+      <div class="row" *ngFor="let project of projects | projectfilter : project.value | projectsortfilter : property">
           <div class="col-5"><div class="card text-white bg-secondary w-60 p-3">
               <div class="card-body">
-                  <h5 class="card-title">{{project.title}}</h5>
+                  <h5 class="card-title">{{project.project}}</h5>
                   <div class="row">
-                      <div class="col"><b>No. of Tasks:</b> {{project.noTasks}}</div>
-                      <div class="col"><b>Start Date:</b> {{project.prjStartDate}}</div>
+                      <div class="col"><b>No. of Tasks:</b> {{project.tasks?.length}}</div>
+                      <div class="col"><b>Start Date:</b> {{project.startDate}}</div>
                       <div class="w-100"></div>
-                      <div class="col"><b>Completed:</b> {{project.noTasks}}</div>
-                      <div class="col"><b>End Date:</b> {{project.prjEndDate}}</div>
+                      <div class="col"><b>Completed:</b> {{project.compTasks}}</div>
+                      <div class="col"><b>End Date:</b> {{project.endDate}}</div>
                   </div>
               </div>
           </div>
@@ -82,13 +83,13 @@
             <label class="col-form-label"><b>Priority</b></label>
             <div class="card text-white bg-secondary w-50 p-3">
               <div class="card-body">
-                  <h5 class="card-title">{{project.prjPriority}}</h5>
+                  <h5 class="card-title">{{project.priority}}</h5>
               </div>
             </div>
           </div>
-          <div class="col-1"><button type="button" class="btn btn-primary">Update
+          <div class="col-1"><button type="button" class="btn btn-primary" routerLink="/addProject/{{project.projectId}}">Update
             </button></div>
-          <div class="col-1"><button type="button" class="btn btn-danger">Suspend
+          <div class="col-1"><button type="button" class="btn btn-danger" (click)="deleteProject(project.projectId)">Suspend
             </button></div>
         </div>
 <!-- User Modal -->
@@ -103,7 +104,7 @@
         </div>
         <div class="modal-body">
             <div class="list-group" *ngFor="let user of users">
-                <li class="list-group-item list-group-item-action" (click)="selectedUser()">
+                <li class="list-group-item list-group-item-action" (click)="selectedUser(user.userId)">
                   {{user.firstName}}
                 </li>
             </div>
