@@ -60,6 +60,8 @@ public class Task implements Serializable {
 	private String status;
 	@Transient
 	private ParentTask parentTask;
+	@Transient
+	private int userId;
 	
 	 /*public static class TaskId implements Serializable {
 
@@ -200,6 +202,18 @@ public class Task implements Serializable {
 	 */
 	public void setParentTask(ParentTask parentTask) {
 		this.parentTask = parentTask;
+	}
+	/**
+	 * @return the userId
+	 */
+	public int getUserId() {
+		return userId;
+	}
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 }

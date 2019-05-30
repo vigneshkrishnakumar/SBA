@@ -3,7 +3,6 @@
  */
 package com.cts.sba.projectmanager.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +75,10 @@ public class ProjectManagerDAO {
 		return dbTasks;
 	}
 	
+	public void delete(Task task) {
+		taskRepository.delete(task);	
+	}
+	
 	public Project persist(Project project) {
 		Project newProject = projectRepository.save(project);
 		return newProject;
@@ -94,9 +97,17 @@ public class ProjectManagerDAO {
 		return null;
 	}
 	
+	public void delete(Project project) {
+		projectRepository.delete(project);	
+	}
+	
 	public User persist(User user) {
 		User newUser = userRepository.save(user);
 		return newUser;
+	}
+	
+	public void delete(User user) {
+		userRepository.delete(user);
 	}
 	
 	public List<User> fetchAllUsers() {
@@ -111,4 +122,10 @@ public class ProjectManagerDAO {
 		}
 		return null;
 	}
+	
+	public User fetchOneUserByProject(String projectId) {
+		User dbUser = userRepository.findByProject(projectId);
+		return dbUser;
+	}
+
 }

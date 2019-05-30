@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.sba.projectmanager.bean.Task;
+import com.cts.sba.projectmanager.bean.User;
 import com.cts.sba.projectmanager.service.ProjectManagerService;
 
 /**
@@ -41,8 +42,15 @@ public class TaskController {
 	@PostMapping("/saveTask")
 	public Task saveTask(@RequestBody Task task) {
 		Task newTask = null;
+		User user = null;
 		try {
 			newTask = projectManagerService.addTask(task);
+			user = projectManagerService.getUser(String.valueOf(task.getUserId()));
+			if(user != null) {
+				user.setUserProjectId(newTask.getProjectId());
+				user.setUserTaskId(newTask.getTaskId());
+				projectManagerService.addUser(user);
+			}
 			logger.info(messageSource.getMessage("task.added", new Object[0], null));
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -55,6 +63,7 @@ public class TaskController {
 	@PutMapping("/updateTask/{id}")
 	public Task updateTask(@PathVariable String id, @RequestBody Task task) {
 		Task dbTask = null;
+		User user = null;
 		try {
 			dbTask = projectManagerService.getTask(id);
 			logger.info("Existing task retrieved");
@@ -65,6 +74,12 @@ public class TaskController {
 				dbTask.setEndDate(task.getEndDate());
 				dbTask.setStatus(task.getStatus());
 				dbTask = projectManagerService.addTask(dbTask);
+				user = projectManagerService.getUser(String.valueOf(task.getUserId()));
+				if(user != null) {
+					user.setUserProjectId(dbTask.getProjectId());
+					user.setUserTaskId(dbTask.getTaskId());
+					projectManagerService.addUser(user);
+				}
 				logger.info(messageSource.getMessage("task.updated", new Object[0], Locale.US));
 			}
 		} catch(Exception e) {
@@ -92,8 +107,13 @@ public class TaskController {
 	@GetMapping("/getTask/{taskId}")
 	public Task getTask(@PathVariable String taskId) {
 		Task task = null;
+		User user = null;
 		try {
 			task = projectManagerService.getTask(taskId);
+			user = projectManagerService.getUserByProject(String.valueOf(task.getProjectId()));
+			if(user != null) {
+				task.setUserId(user.getUserId());
+			}
 			logger.info(messageSource.getMessage("task.fetched", new Object[0], Locale.US));
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -49,6 +49,12 @@ public class Project implements Serializable {
 	private int priority;
 	@Transient
 	private List<Task> tasks;
+	@Transient
+	private int managerId;
+	@Transient
+	private String managerName;
+	@Transient
+	private int compTasks;
 	
 	/**
 	 * @return the projectId
@@ -121,6 +127,42 @@ public class Project implements Serializable {
 	 */
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
+	}
+	/**
+	 * @return the managerId
+	 */
+	public int getManagerId() {
+		return managerId;
+	}
+	/**
+	 * @param managerId the managerId to set
+	 */
+	public void setManagerId(int managerId) {
+		this.managerId = managerId;
+	}
+	/**
+	 * @return the managerName
+	 */
+	public String getManagerName() {
+		return managerName;
+	}
+	/**
+	 * @param managerName the managerName to set
+	 */
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
+	/**
+	 * @return the compTasks
+	 */
+	public int getCompTasks() {
+		return compTasks;
+	}
+	/**
+	 * @param compTasks the compTasks to set
+	 */
+	public void setCompTasks(int compTasks) {
+		this.compTasks = compTasks;
 	}
 
 }

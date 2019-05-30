@@ -38,7 +38,7 @@ public class ProjectManagerService {
 	}
 	
 	public List<ParentTask> fetchParentTasks() throws Exception {
-		List<ParentTask> parentTasks = new ArrayList<>();
+		List<ParentTask> parentTasks = new ArrayList<ParentTask>();
 		parentTasks = projectManagerDAO.fetchAllParents();
 		return parentTasks;
 	}
@@ -62,9 +62,13 @@ public class ProjectManagerService {
 	}
 	
 	public List<Task> fetchTasks() throws Exception {
-		List<Task> tasks = new ArrayList<>();
+		List<Task> tasks = new ArrayList<Task>();
 		tasks = projectManagerDAO.fetchAllTasks();
 		return tasks;
+	}
+	
+	public void deleteTask(Task task) throws Exception {
+		projectManagerDAO.delete(task);
 	}
 	
 	public Project addProject(Project project) throws Exception {
@@ -80,9 +84,13 @@ public class ProjectManagerService {
 	}
 	
 	public List<Project> fetchProjects() throws Exception {
-		List<Project> projects = new ArrayList<>();
+		List<Project> projects = new ArrayList<Project>();
 		projects = projectManagerDAO.fetchAllProjects();
 		return projects;
+	}
+	
+	public void deleteProject(Project project) throws Exception {
+		projectManagerDAO.delete(project);
 	}
 	
 	public User addUser(User user) throws Exception {
@@ -97,9 +105,19 @@ public class ProjectManagerService {
 		return dbUser;
 	}
 	
+	public User getUserByProject(String id) throws Exception {
+		User dbUser = new User();
+		dbUser = projectManagerDAO.fetchOneUserByProject(id);
+		return dbUser;
+	}
+	
 	public List<User> fetchUsers() throws Exception {
-		List<User> users = new ArrayList<>();
+		List<User> users = new ArrayList<User>();
 		users = projectManagerDAO.fetchAllUsers();
 		return users;
+	}
+	
+	public void deleteUser(User user) throws Exception {
+		projectManagerDAO.delete(user);
 	}
 }
